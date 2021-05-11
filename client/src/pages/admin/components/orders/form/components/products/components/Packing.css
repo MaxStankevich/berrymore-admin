@@ -1,0 +1,29 @@
+.packing-wrapper {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.packing-input-wrapper {
+    display: inline-block;
+    width: 85px;
+}
+
+.packing-input-label {
+    display: flex;
+    justify-content: center;
+}
+
+.packing-input {
+    display: flex;
+    align-items: center;
+}
+
+.packing-quantity {
+    font-size: 25px;
+}
+
+.packing-label {
+    margin-bottom: 10px;
+}
