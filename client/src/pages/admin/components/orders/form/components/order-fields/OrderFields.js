@@ -52,7 +52,7 @@ const OrderFields = ({ form }) => {
                   },
                 ]}
               >
-                <DatePicker disabledDate={(current) => current && current < moment().endOf('day')}/>
+                <DatePicker format="DD.MM.YYYY" disabledDate={(current) => current && current < moment().endOf('day')}/>
               </Form.Item>
               <Form.Item
                 name="deliveryTime"
