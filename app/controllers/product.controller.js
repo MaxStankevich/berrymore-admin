@@ -1,8 +1,9 @@
+const { Op } = require("sequelize");
 const db = require("../models");
 const Product = db.product;
 
 exports.products = (req, res) => {
-  Product.findAll().then(products => {
+  Product.findAll({ where: { deleted: { [Op.not]: true } } }).then(products => {
     res.status(200).send(products);
   }).catch(err => {
     res.status(500).send({ message: err.message });
@@ -39,12 +40,11 @@ exports.createProduct = (req, res) => {
 };
 
 exports.deleteProduct = (req, res) => {
-  Product.destroy({
-    where: {
-      id: req.params.id
-    }
-  }).then(() => {
-    res.status(200).end();
+  Product.findByPk(req.params.id)
+    .then(product => {
+      return product.update({ deleted: true })
+    }).then(() => {
+    res.status(204).end();
   })
     .catch(err => {
       res.status(500).send({ message: err.message });

@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING
     },
+    deleted: {
+      type: Sequelize.BOOLEAN
+    }
   }, { timestamps: false });
 
   return Product;
