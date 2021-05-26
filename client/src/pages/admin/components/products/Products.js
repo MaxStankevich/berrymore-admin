@@ -25,6 +25,10 @@ const Products = () => {
       dataIndex: 'name',
     },
     {
+      title: 'Цена за 1 кг (руб)',
+      dataIndex: 'price',
+    },
+    {
       title: 'Описание',
       dataIndex: 'description',
     },

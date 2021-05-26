@@ -47,6 +47,20 @@ const OrderForm = ({ order = {}, onSuccess }) => {
   const isEdit = !!(order.id);
   const [user] = useAuth();
 
+  const [products, setProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(false);
+
+  useEffect(() => {
+    setProductsLoading(true);
+    request.get("/products").then(res => {
+      setProducts(res.data);
+    }).catch(() => {
+      notification.error({ message: "Не удалось загрузить продукты" })
+    }).finally(() => {
+      setProductsLoading(false);
+    })
+  }, [setProducts, setProductsLoading])
+
   const fetchCustomers = (searchTerm = "") => {
     setCustomersLoading(true);
     request.get("/customers", { params: { page: 1, size: 10, search: searchTerm } }).then(res => {
@@ -171,7 +185,7 @@ const OrderForm = ({ order = {}, onSuccess }) => {
         scrollToFirstError
         style={{ maxWidth: 750, margin: "0 auto" }}
       >
-        <Products form={form}/>
+        <Products form={form} products={products} productsLoading={productsLoading}/>
         <div style={{ marginBottom: "50px" }}>
           <OrderFields form={form}/>
           <Form.Item

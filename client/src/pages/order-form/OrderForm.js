@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Form,
   Button,
@@ -8,7 +8,6 @@ import request from "../../utils/request";
 import Products from "../admin/components/orders/form/components/products/Products";
 import OrderFields from "../admin/components/orders/form/components/order-fields/OrderFields";
 import CustomerFields from "../admin/components/orders/form/components/customer-fields/CustomerFields";
-import { Link } from "react-router-dom";
 
 const tailFormItemLayout = {
   wrapperCol: {
@@ -27,6 +26,19 @@ const OrderForm = () => {
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [products, setProducts] = useState([]);
+  const [productsLoading, setProductsLoading] = useState(false);
+
+  useEffect(() => {
+    setProductsLoading(true);
+    request.get("/products").then(res => {
+      setProducts(res.data);
+    }).catch(() => {
+      notification.error({ message: "Не удалось загрузить продукты" })
+    }).finally(() => {
+      setProductsLoading(false);
+    })
+  }, [setProducts, setProductsLoading])
 
   const onFinish = (values) => {
     const errors = [];
@@ -37,7 +49,13 @@ const OrderForm = () => {
       errors.push("Не указано количество товара")
     }
 
-    console.log(values.products);
+    const totalQuantity = values.products.reduce((result, val = {}) => {
+      return result + (val.quantity || 0);
+    }, 0)
+
+    if (totalQuantity < 10 && values.deliveryMethodId === 3) {
+      errors.push("Яндекс доставка доступна только при заказе от 10 кг")
+    }
 
     if (errors.length) {
       notification.error({ message: errors.join(". ") })
@@ -89,7 +107,7 @@ const OrderForm = () => {
         scrollToFirstError
         style={{ maxWidth: 750, margin: "0 auto", paddingBottom: 30 }}
       >
-        <Products form={form}/>
+        <Products form={form} products={products} productsLoading={productsLoading} />
         <OrderFields form={form}/>
         <CustomerFields validatePhone/>
         <Form.Item
@@ -97,6 +115,16 @@ const OrderForm = () => {
           label="Дополнительные условия и пожелания"
         >
           <Input.TextArea/>
+        </Form.Item>
+        <Form.Item shouldUpdate>
+          {() => {
+            const productsValue = form.getFieldValue("products") || [];
+            const totalPrice = productsValue.reduce((result, val = {}) => {
+              const product = products.find((pr => pr.id === val.id)) || {};
+              return result + ((val.quantity * product.price) || 0);
+            }, 0)
+            return `Итого к оплате: ${totalPrice} BYN`;
+          }}
         </Form.Item>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit" size="large" loading={loading}>

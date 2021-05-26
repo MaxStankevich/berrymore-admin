@@ -43,6 +43,15 @@ const OrdersList = ({ orders, loading, showCustomer = true, fetchOrders }) => {
         ))
       ),
     },
+    {
+      title: 'К оплате',
+      dataIndex: "products",
+      render: products => (
+        products && !!products.length && `${(products || []).reduce((result, product = {}) => {
+          return result + ((product.order_product.quantity * product.price) || 0);
+        }, 0)} BYN`
+      ),
+    },
     ...(showCustomer ? [{
       title: 'Заказчик',
       dataIndex: "customer",

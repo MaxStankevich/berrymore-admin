@@ -61,11 +61,19 @@ const ShowOrder = () => {
             </Fragment>
           )
         })}</Descriptions.Item>
+        <Descriptions.Item label="К оплате">
+          {
+            (order.products || []).reduce((result, product = {}) => {
+              return result + ((product.order_product.quantity * product.price) || 0);
+            }, 0)
+          } BYN
+        </Descriptions.Item>
         <Descriptions.Item label="Способ доставки">{order.deliveryMethod.name}</Descriptions.Item>
         {order.deliveryMethod.id === 2 && order.deliveryAddress &&
         <Descriptions.Item label="Адрес доставки">{order.deliveryAddress}</Descriptions.Item>}
-        {order.deliveryMethod.id === 2 && order.deliveryTime &&
-        <Descriptions.Item label="Время доставки">{moment(order.deliveryDate).format("D MMMM YYYY")}<br/>{order.deliveryTime}</Descriptions.Item>}
+        <Descriptions.Item
+          label="Время доставки">{moment(order.deliveryDate).format("D MMMM YYYY")}<br/>{order.deliveryTime}
+        </Descriptions.Item>
         <Descriptions.Item label="Способ оплаты">{order.paymentMethod}</Descriptions.Item>
         <Descriptions.Item label="Статус"><StatusTag {...order.orderStatus} /></Descriptions.Item>
         <Descriptions.Item label="Ответственный">

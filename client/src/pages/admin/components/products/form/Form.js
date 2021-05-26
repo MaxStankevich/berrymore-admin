@@ -3,6 +3,7 @@ import {
   Form,
   Input,
   Button,
+  InputNumber,
   notification
 } from 'antd';
 import request from "../../../../../utils/request";
@@ -60,6 +61,12 @@ const ProductForm = ({ product = {}, onSuccess }) => {
           ]}
         >
           <Input/>
+        </Form.Item>
+        <Form.Item
+          name="price"
+          label="Цена за 1 кг (руб)"
+        >
+          <InputNumber />
         </Form.Item>
         <Form.Item
           name="description"

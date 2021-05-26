@@ -6,6 +6,9 @@ module.exports = (sequelize, Sequelize) => {
     description: {
       type: Sequelize.STRING
     },
+    price: {
+      type: Sequelize.INTEGER
+    },
     deleted: {
       type: Sequelize.BOOLEAN
     }
