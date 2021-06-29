@@ -20,9 +20,9 @@ const Statistics = () => {
 
   const data = Object.keys(products).map(key => {
     const value = products[key].reduce((acc, item) => {
-      acc.all += item.order_product.quantity;
+      acc.all += Number(item.order_product.quantity);
       if (item.orderStatusId === 1) {
-        acc.raw += item.order_product.quantity;
+        acc.raw += Number(item.order_product.quantity);
       }
       return acc
     }, { all: 0, raw: 0 });
@@ -35,7 +35,7 @@ const Statistics = () => {
   });
 
   const totalProducts = data.reduce((acc, item) => {
-    return acc + item.value
+    return acc + Number(item.value)
   }, 0)
 
   const config = {

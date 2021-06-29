@@ -3,7 +3,9 @@ import { notification } from "antd";
 import { getUserToken } from "./user";
 
 const request = axios.create({
+  // dev
   // baseURL: "http://localhost:5000/api/",
+  // prod
   baseURL: "/api/",
 });
 
