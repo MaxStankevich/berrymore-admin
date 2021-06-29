@@ -42,7 +42,7 @@ const Orders = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchOrders();
-    }, 5000);
+    }, 60000);
 
     return () => {
       clearInterval(interval)

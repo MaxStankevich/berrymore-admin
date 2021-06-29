@@ -31,7 +31,7 @@ const EditOrder = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchOrder();
-    }, 5000);
+    }, 60000);
 
     return () => {
       clearInterval(interval)

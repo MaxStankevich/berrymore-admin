@@ -3,18 +3,32 @@ import {
   InputNumber
 } from 'antd';
 import { PlusOutlined, MinusOutlined } from '@ant-design/icons';
+import useDidUpdateEffect from "../../../../../../../../hooks/useDidUpdateEffect";
 import './Packing.css';
 
 const PACKING = [1, 2, 5];
+const PACKING_RASPBERRIES = [0.5];
 
-const Packing = ({ value: formValue = "{}", onChange }) => {
+const getPackingValue = (productId) => {
+  if (productId === 3) {
+    return { title: "Фасовка: укажите кол-во ящиков объёмом 0.5 кг", values: PACKING_RASPBERRIES };
+  }
+  return { title: "Фасовка: укажите кол-во ящиков объёмами 1, 2 или 5 кг", values: PACKING };
+}
+
+const Packing = ({ value: formValue = "{}", onChange, productId }) => {
   const value = (typeof formValue === "string" ? JSON.parse(formValue) : formValue) || {};
+  const packingValue = getPackingValue(productId);
+
+  useDidUpdateEffect(() => {
+    onChange("{}")
+  }, [productId])
 
   return (
     <>
-      <div className="packing-label">Фасовка: укажите кол-во ящиков объёмами (1, 2 или 5 кг)</div>
+      <div className="packing-label">{packingValue.title}</div>
       <div className="packing-wrapper">
-        {PACKING.map(packing =>
+        {packingValue.values.map(packing =>
           <div key={packing} className="packing-input-wrapper">
             <div className="packing-input-label">{packing}кг</div>
             <div className="packing-input">

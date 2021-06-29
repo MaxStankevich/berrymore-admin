@@ -58,17 +58,26 @@ const OrderForm = ({ form, products, productsLoading }) => {
                       </Button>
                     </Col>
                   </Row>
-                  <Row>
-                    <Form.Item
-                      {...field}
-                      name={[field.name, 'packing']}
-                      fieldKey={[field.fieldKey, 'packing']}
-                      label="Фасовка"
-                      noStyle
-                    >
-                      <Packing/>
-                    </Form.Item>
-                  </Row>
+                  <Form.Item
+                    noStyle
+                    shouldUpdate
+                  >
+                    {() => {
+                      const productId = form.getFieldValue(["products", field.key, "id"]);
+                      return productId ? (
+                        <Row>
+                          <Form.Item
+                            {...field}
+                            name={[field.name, 'packing']}
+                            fieldKey={[field.fieldKey, 'packing']}
+                            label="Фасовка"
+                            noStyle
+                          >
+                            <Packing productId={productId} />
+                          </Form.Item>
+                        </Row>) : null
+                    }}
+                  </Form.Item>
                   <Row>
                     <Form.Item shouldUpdate>
                       {() => {

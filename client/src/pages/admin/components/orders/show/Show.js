@@ -34,7 +34,7 @@ const ShowOrder = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       fetchOrder();
-    }, 5000);
+    }, 60000);
 
     return () => {
       clearInterval(interval)
@@ -54,7 +54,7 @@ const ShowOrder = () => {
           const packing = JSON.parse(product.order_product.packing || "{}");
           return (
             <Fragment key={product.id}>
-              {product.name}: {product.order_product.quantity} кг
+              {product.name}: {product.order_product.quantity.replace(/\.0+$/,'')} кг
               ({Object.keys(packing).map(key => packing[key] ?
               <span key={key}>{key}кг×<strong>{packing[key]}</strong>, </span> : null)})
               <br/>
