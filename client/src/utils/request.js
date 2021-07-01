@@ -3,10 +3,8 @@ import { notification } from "antd";
 import { getUserToken } from "./user";
 
 const request = axios.create({
-  // dev
-  // baseURL: "http://localhost:5000/api/",
-  // prod
-  baseURL: "/api/",
+  // baseURL: "http://localhost:5000/api/", // dev
+  baseURL: "/api/", // prod
 });
 
 request.interceptors.request.use(function (config) {

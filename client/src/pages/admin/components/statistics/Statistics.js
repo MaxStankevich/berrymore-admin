@@ -14,12 +14,34 @@ const Statistics = () => {
     createdAt: null,
   });
 
-  const products = groupBy(orders.data.reduce((acc, order) => {
-    return acc.concat(order.products.map(prod => ({ ...prod, orderStatusId: order.orderStatusId })));
-  }, []), "name");
+  const products = orders.data.reduce((acc, order) => {
+    return acc.concat(order.products.map(prod => ({
+      ...prod,
+      orderStatusId: order.orderStatusId,
+      orderStatusName: order.orderStatus.name
+    })));
+  }, [])
 
-  const data = Object.keys(products).map(key => {
-    const value = products[key].reduce((acc, item) => {
+  const productsByName = groupBy(products, "name");
+  const productsByStatus = groupBy(products, "orderStatusName");
+
+  let totalMoney = 0;
+  const moneyData = Object.keys(productsByStatus).map(status => {
+    const value = productsByStatus[status].reduce((acc, item) => {
+      acc += Number(item.order_product.quantity) * Number(item.price);
+      return acc;
+    }, 0);
+
+    totalMoney += value;
+
+    return ({
+      status,
+      value
+    })
+  });
+
+  const data = Object.keys(productsByName).map(key => {
+    const value = productsByName[key].reduce((acc, item) => {
       acc.all += Number(item.order_product.quantity);
       if (item.orderStatusId === 1) {
         acc.raw += Number(item.order_product.quantity);
@@ -97,6 +119,19 @@ const Statistics = () => {
       >
         {data.map(item => <Descriptions.Item key={item.type} label={item.type}>{item.label}</Descriptions.Item>)}
         <Descriptions.Item label="Всего">{totalProducts}кг</Descriptions.Item>
+      </Descriptions>
+      <Descriptions
+        title="Сумма по статусам (BYN)"
+        bordered
+        layout="vertical"
+        style={{ marginBottom: 50 }}
+      >
+        {moneyData.map(item => (
+          <Descriptions.Item key={item.status} label={item.status}>
+            {item.value} BYN
+          </Descriptions.Item>
+        ))}
+        <Descriptions.Item label="Всего">{totalMoney} BYN</Descriptions.Item>
       </Descriptions>
       <Pie {...config} loading={loading}/>
     </>
