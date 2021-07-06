@@ -52,7 +52,18 @@ const OrderFields = ({ form }) => {
           },
         ]}
       >
-        <DatePicker format="DD.MM.YYYY" disabledDate={(current) => current && current < moment().endOf('day')}/>
+        <DatePicker
+          format="DD.MM.YYYY"
+          disabledDate={(current) => {
+            if (current) {
+              if (current.isSame(new Date(), "day")) {
+                return false;
+              }
+              return current < moment().endOf('day');
+            }
+            return false;
+          }}
+        />
       </Form.Item>
       <Form.Item
         name="deliveryTime"

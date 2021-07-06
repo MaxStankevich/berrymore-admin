@@ -3,8 +3,7 @@ import { notification } from "antd";
 import { getUserToken } from "./user";
 
 const request = axios.create({
-  // baseURL: "http://localhost:5000/api/", // dev
-  baseURL: "/api/", // prod
+  baseURL: process.env.NODE_ENV === "development" ? "http://localhost:5000/api/" : "/api/"
 });
 
 request.interceptors.request.use(function (config) {
@@ -23,7 +22,7 @@ request.interceptors.response.use(
   response => {
     return response;
   },
-  function(error) {
+  function (error) {
     // Do something with response error
     if (error.response.status === 401) {
       notification.error({ message: error.response.data.message || "Ошибка авторизации!" });
@@ -32,4 +31,4 @@ request.interceptors.response.use(
   }
 );
 
-export  default request;
+export default request;
