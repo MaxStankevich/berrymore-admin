@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { DatePicker, Descriptions } from "antd";
 import { Pie } from '@ant-design/charts';
 import { groupBy } from 'lodash-es';
-import moment from 'moment';
 import request from "../../../../utils/request";
 
 const Statistics = () => {
@@ -27,16 +26,30 @@ const Statistics = () => {
 
   let totalMoney = 0;
   const moneyData = Object.keys(productsByStatus).map(status => {
-    const value = productsByStatus[status].reduce((acc, item) => {
+    const currentProducts = productsByStatus[status];
+    const money = currentProducts.reduce((acc, item) => {
       acc += Number(item.order_product.quantity) * Number(item.price);
       return acc;
     }, 0);
+    const currentProductsByName = groupBy(currentProducts, "name");
+    const productsQuantity = Object.keys(currentProductsByName).map(key => {
+      const value = currentProductsByName[key].reduce((acc, item) => {
+        acc += Number(item.order_product.quantity);
+        return acc
+      }, 0);
 
-    totalMoney += value;
+      return ({
+        type: key,
+        value: value
+      })
+    });
+
+    totalMoney += money;
 
     return ({
       status,
-      value
+      money,
+      quantity: productsQuantity
     })
   });
 
@@ -51,7 +64,7 @@ const Statistics = () => {
 
     return ({
       type: key,
-      label: `${value.all}кг (${value.raw}кг не обработано)`,
+      // label: `${value.all}кг (${value.raw}кг не обработано)`,
       value: value.all
     })
   });
@@ -112,15 +125,6 @@ const Statistics = () => {
         updateParams({ createdAt: JSON.stringify(str) })
       }}/>
       <Descriptions
-        title={params.createdAt ? `За период ${JSON.parse(params.createdAt).map(time => `${moment(time).format('D MMMM YYYY')}, 00:00`).join(" - ")}` : "За всё время"}
-        bordered
-        layout="vertical"
-        style={{ marginBottom: 50 }}
-      >
-        {data.map(item => <Descriptions.Item key={item.type} label={item.type}>{item.label}</Descriptions.Item>)}
-        <Descriptions.Item label="Всего">{totalProducts}кг</Descriptions.Item>
-      </Descriptions>
-      <Descriptions
         title="Сумма по статусам (BYN)"
         bordered
         layout="vertical"
@@ -128,10 +132,14 @@ const Statistics = () => {
       >
         {moneyData.map(item => (
           <Descriptions.Item key={item.status} label={item.status}>
-            {item.value} BYN
+            {item.quantity.map(prod => <Fragment key={prod.type}><b>{prod.type}:</b> {prod.value} кг<br/></Fragment>)}
+            {item.money} BYN
           </Descriptions.Item>
         ))}
-        <Descriptions.Item label="Всего">{totalMoney} BYN</Descriptions.Item>
+        <Descriptions.Item label="Всего">
+          {data.map(prod => <Fragment key={prod.type}><b>{prod.type}:</b> {prod.value} кг<br/></Fragment>)}
+          {totalMoney} BYN
+        </Descriptions.Item>
       </Descriptions>
       <Pie {...config} loading={loading}/>
     </>
