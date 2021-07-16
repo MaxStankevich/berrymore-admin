@@ -63,9 +63,9 @@ const ShowOrder = () => {
         })}</Descriptions.Item>
         <Descriptions.Item label="К оплате">
           {
-            (order.products || []).reduce((result, product = {}) => {
+            String(order.totalAmount || (order.products || []).reduce((result, product = {}) => {
               return result + ((product.order_product.quantity * product.price) || 0);
-            }, 0)
+            }, 0)).replace(/\.0+$/,'')
           } BYN
         </Descriptions.Item>
         <Descriptions.Item label="Способ доставки">{order.deliveryMethod.name}</Descriptions.Item>

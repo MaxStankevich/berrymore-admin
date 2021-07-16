@@ -22,18 +22,32 @@ const Statistics = () => {
   }, [])
 
   const productsByName = groupBy(products, "name");
-  const productsByStatus = groupBy(products, "orderStatusName");
+  const ordersByStatus = groupBy(orders.data, "orderStatus.name");
 
   let totalMoney = 0;
-  const moneyData = Object.keys(productsByStatus).map(status => {
-    const currentProducts = productsByStatus[status];
-    const money = currentProducts.reduce((acc, item) => {
-      acc += Number(item.order_product.quantity) * Number(item.price);
-      return acc;
-    }, 0);
-    const currentProductsByName = groupBy(currentProducts, "name");
-    const productsQuantity = Object.keys(currentProductsByName).map(key => {
-      const value = currentProductsByName[key].reduce((acc, item) => {
+
+  const moneyData = Object.keys(ordersByStatus).map(status => {
+    const orders = ordersByStatus[status];
+    const money = orders.reduce((moneyResult, order) => {
+      const amount = order.totalAmount || order.products.reduce((acc, item) => {
+        acc += Number(item.order_product.quantity) * Number(item.price);
+        return acc;
+      }, 0);
+      return moneyResult + Number(amount);
+    }, 0)
+
+    totalMoney += money;
+
+    const currentProducts = orders.reduce((acc, order) => {
+      return acc.concat(order.products.map(prod => ({
+        ...prod,
+        orderStatusId: order.orderStatusId,
+        orderStatusName: order.orderStatus.name
+      })));
+    }, [])
+    const productsByName = groupBy(currentProducts, "name");
+    const productsQuantity = Object.keys(productsByName).map(key => {
+      const value = productsByName[key].reduce((acc, item) => {
         acc += Number(item.order_product.quantity);
         return acc
       }, 0);
@@ -44,13 +58,11 @@ const Statistics = () => {
       })
     });
 
-    totalMoney += money;
-
-    return ({
+    return {
       status,
       money,
-      quantity: productsQuantity
-    })
+      quantity: productsQuantity,
+    }
   });
 
   const data = Object.keys(productsByName).map(key => {

@@ -37,7 +37,7 @@ const OrdersList = ({ orders, loading, showCustomer = true, fetchOrders }) => {
       render: products => (
         products && !!products.length && products.map(product => (
           <Fragment key={product.id}>
-            {product.name} ({product.order_product.quantity.replace(/\.0+$/,'')} кг)
+            {product.name} ({product.order_product.quantity.replace(/\.0+$/, '')} кг)
             <br/>
           </Fragment>
         ))
@@ -46,11 +46,14 @@ const OrdersList = ({ orders, loading, showCustomer = true, fetchOrders }) => {
     {
       title: 'К оплате',
       dataIndex: "products",
-      render: products => (
-        products && !!products.length && `${(products || []).reduce((result, product = {}) => {
+      render: (products, record) => {
+        const amount = record.totalAmount || (products || []).reduce((result, product = {}) => {
           return result + ((product.order_product.quantity * product.price) || 0);
-        }, 0)} BYN`
-      ),
+        }, 0)
+        return (
+          products && !!products.length && `${String(amount).replace(/\.0+$/, '')} BYN`
+        )
+      },
     },
     ...(showCustomer ? [{
       title: 'Заказчик',

@@ -44,8 +44,9 @@ const OrderForm = ({ order = {}, onSuccess }) => {
   const [usersLoading, setUsersLoading] = useState(false);
   const [loading, setLoading] = useState(false);
   const [customerRadio, setCustomerRadio] = useState(1);
-  const isEdit = !!(order.id);
   const [user] = useAuth();
+
+  const isEdit = !!(order.id);
 
   const [products, setProducts] = useState([]);
   const [productsLoading, setProductsLoading] = useState(false);
@@ -176,6 +177,9 @@ const OrderForm = ({ order = {}, onSuccess }) => {
           orderStatusId: order.orderStatusId,
           userId: order.userId,
           products: initialProducts,
+          totalAmount: String(order.totalAmount || order.products.reduce((result, val = {}) => {
+            return result + ((val.order_product.quantity * val.price) || 0);
+          }, 0)).replace(/\.0+$/, ''),
         } : {
           deliveryMethodId: 1,
           orderStatusId: 1,
@@ -184,6 +188,16 @@ const OrderForm = ({ order = {}, onSuccess }) => {
         }}
         scrollToFirstError
         style={{ maxWidth: 750, margin: "0 auto" }}
+        onValuesChange={(newValues, allValues) => {
+          if (newValues.products && products.length) {
+            const totalPrice = allValues.products.reduce((result, val = {}) => {
+              const product = products.find((pr => pr.id === val.id)) || {};
+              return result + ((val.quantity * product.price) || 0);
+            }, 0)
+
+            form.setFieldsValue({ totalAmount: totalPrice });
+          }
+        }}
       >
         <Products form={form} products={products} productsLoading={productsLoading}/>
         <div style={{ marginBottom: "50px" }}>
@@ -284,6 +298,12 @@ const OrderForm = ({ order = {}, onSuccess }) => {
             }
           </>
         }
+        <Form.Item
+          name="totalAmount"
+          label="К оплате (BYN)"
+        >
+          <Input type="number"/>
+        </Form.Item>
         <Form.Item {...tailFormItemLayout}>
           <Button type="primary" htmlType="submit" loading={loading}>
             {isEdit ? "Сохранить" : "Создать"}

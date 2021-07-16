@@ -31,22 +31,27 @@ const OrderForm = ({ form, products, productsLoading }) => {
                         {() => {
                           const values = form.getFieldValue("products") || [];
                           const selectedIds = values.filter(val => val && val.id).map(val => val.id);
+                          const productId = form.getFieldValue(["products", field.key, "id"]);
+                          const product = products.find(pr => pr.id === productId);
                           return (
-                            <Form.Item
-                              {...field}
-                              label="Товар"
-                              name={[field.name, 'id']}
-                              fieldKey={[field.fieldKey, 'id']}
-                              rules={[{ required: true, message: 'Выберите товар' }]}
-                            >
-                              <Select disabled={productsLoading}>
-                                {products.map(item => (
-                                  <Option disabled={selectedIds.includes(item.id)} key={item.id} value={item.id}>
-                                    {item.name} {item.price ? `(${item.price} BYN за 1 кг)`: null}
-                                  </Option>
-                                ))}
-                              </Select>
-                            </Form.Item>
+                            <>
+                              <Form.Item
+                                {...field}
+                                label="Товар"
+                                name={[field.name, 'id']}
+                                fieldKey={[field.fieldKey, 'id']}
+                                rules={[{ required: true, message: 'Выберите товар' }]}
+                              >
+                                <Select disabled={productsLoading}>
+                                  {products.map(item => (
+                                    <Option disabled={selectedIds.includes(item.id)} key={item.id} value={item.id}>
+                                      {item.name} {item.price ? `(${item.price} BYN за 1 кг)` : null}
+                                    </Option>
+                                  ))}
+                                </Select>
+                              </Form.Item>
+                              {product && product.description && <i style={{ color: "gray" }}>{product.description}</i>}
+                            </>
                           )
                         }}
                       </Form.Item>

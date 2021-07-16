@@ -105,7 +105,13 @@ exports.createOrder = async (req, res) => {
       }
     }
     if (customerId) {
-      order = await Order.create({ deleted: false, orderStatusId: 1, customerId, ...body });
+      let totalAmount = 0;
+      for (let i = 0; i < products.length; i += 1) {
+        const product = await Product.findByPk(products[i].id);
+        totalAmount += Number(product.price) * Number(products[i].quantity)
+      }
+
+      order = await Order.create({ deleted: false, orderStatusId: 1, customerId, totalAmount: totalAmount, ...body });
       if (order && products && products.length) {
         for (let i = 0; i < products.length; i++) {
           const { id, ...orderProduct } = products[i];

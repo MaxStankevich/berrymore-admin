@@ -66,3 +66,7 @@
   border: #d9d9d9 1px dashed;
   padding: 5px 15px;
 }
+
+.order-form {
+  user-select: none;
+}

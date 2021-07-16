@@ -12,6 +12,9 @@ module.exports = (sequelize, Sequelize) => {
     paymentMethod: {
       type: Sequelize.STRING
     },
+    totalAmount: {
+      type: Sequelize.DECIMAL
+    },
     notes: {
       type: Sequelize.STRING
     },
