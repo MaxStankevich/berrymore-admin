@@ -31,6 +31,7 @@ db.sequelize.sync().then(() => {
   console.log('Drop and Resync Db');
   console.log("DB_HOST", process.env.DB_HOST);
   console.log("PORT", process.env.PORT);
+  // initial();
 });
 
 // simple route
