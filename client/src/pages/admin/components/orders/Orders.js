@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Button, notification, Pagination, Select } from 'antd';
+import { Button, notification, Pagination, Select, Input } from 'antd';
 import { Link } from "react-router-dom";
+import { debounce } from "lodash-es";
 import OrdersList from "./list/List";
 import request from "../../../../utils/request";
 import { getOrdersParams, setOrdersParams } from "../../../../utils/order";
@@ -20,10 +21,10 @@ const Orders = () => {
     setParams(prevParams => ({ ...prevParams, ...data }));
   }
 
-  const updateFilter = (data) => {
+  const updateFilter = debounce((data) => {
     setOrdersParams({ ...params, page: 1, size: 10, filter: { ...params.filter, ...data } });
     setParams(prevParams => ({ ...prevParams, page: 1, size: 10, filter: { ...prevParams.filter, ...data } }));
-  }
+  }, 500)
 
   const fetchOrders = useCallback(() => {
     setLoading(true);
@@ -117,6 +118,11 @@ const Orders = () => {
           ))}
           <Select.Option value={null}>Никто</Select.Option>
         </Select>{" "}
+        <Input
+          style={{ width: 300 }}
+          onChange={e => updateFilter({ id: e.target.value || undefined })}
+          placeholder="Поиск по номеру заказа"
+        />
         <Button
           onClick={() => {
             updateParams({ page: 1, size: 10, filter: {}, order: '[["createdAt", "DESC"]]' });

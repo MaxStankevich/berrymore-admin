@@ -50,6 +50,7 @@ const ShowOrder = () => {
           <Link to={`/orders/${id}/edit`}><Button
             type="primary">Редактировать</Button></Link>}
       >
+        <Descriptions.Item label="Номер заказа">{order.id}</Descriptions.Item>
         <Descriptions.Item label="Предмет заказа">{(order.products || []).map(product => {
           const packing = JSON.parse(product.order_product.packing || "{}");
           return (
