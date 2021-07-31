@@ -27,7 +27,7 @@ const User = db.user;
 const Product = db.product;
 
 // { force: true }
-db.sequelize.sync({ force: true }).then(() => {
+db.sequelize.sync().then(() => {
   console.log('Drop and Resync Db');
   console.log("DB_HOST", process.env.DB_HOST);
   console.log("PORT", process.env.PORT);
@@ -91,7 +91,7 @@ function initial() {
 
   DeliveryMethod.create({
     id: 2,
-    name: "Курьер"
+    name: "Курьер (бесплатно)"
   }).then((role) => {
     console.log(">> Created DeliveryMethod: " + JSON.stringify(role, null, 4));
   })

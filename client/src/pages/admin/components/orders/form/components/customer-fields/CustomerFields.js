@@ -21,7 +21,7 @@ const CustomerFields = ({ validatePhone }) => {
       </Form.Item>
       <Form.Item
         name={["customer", "phoneNumber"]}
-        label="Контактный номер"
+        label="Контактный номер (мобильный)"
         rules={[
           {
             required: true,
