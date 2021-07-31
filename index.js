@@ -91,7 +91,7 @@ function initial() {
 
   DeliveryMethod.create({
     id: 2,
-    name: "Курьер"
+    name: "Курьер (бесплатно)"
   }).then((role) => {
     console.log(">> Created DeliveryMethod: " + JSON.stringify(role, null, 4));
   })

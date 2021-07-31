@@ -31,7 +31,7 @@ const DeliveryMethod = ({ form }) => {
     >
       <Select>
         <Select.Option value={1}>Самовывоз (г. Минск, ул. Ильянская 4)</Select.Option>
-        <Select.Option value={2}>Доставка по микрорайону Лебяжий</Select.Option>
+        <Select.Option value={2}>Доставка по микрорайону Лебяжий (бесплатно)</Select.Option>
         <Select.Option
           disabled={!yandexDeliveryAvailable}
           value={3}

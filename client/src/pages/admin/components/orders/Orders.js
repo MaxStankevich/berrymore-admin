@@ -30,7 +30,8 @@ const Orders = () => {
     setLoading(true);
     request.get("/orders", { params }).then(res => {
       setOrder(res.data);
-    }).catch(() => {
+    }).catch((e) => {
+      notification.error({ message: "Не удалось загрузить заказы" });
     }).finally(() => {
       setLoading(false);
     })
