@@ -26,7 +26,7 @@ const OrderStatus = db.orderStatus;
 const User = db.user;
 const Product = db.product;
 
-const alter = process.env.DB_ALTER;
+const alter = process.env.DB_ALTER === 'true';
 
 // { force: true }
 db.sequelize.sync({ alter }).then(() => {
