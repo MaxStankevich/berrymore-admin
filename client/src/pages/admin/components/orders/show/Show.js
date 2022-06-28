@@ -55,9 +55,9 @@ const ShowOrder = () => {
           const packing = JSON.parse(product.order_product.packing || "{}");
           return (
             <Fragment key={product.id}>
-              {product.name}: {product.order_product.quantity.replace(/\.0+$/,'')} кг
-              ({Object.keys(packing).map(key => packing[key] ?
-              <span key={key}>{key}кг×<strong>{packing[key]}</strong>, </span> : null)})
+              {product.name}: {product.order_product.quantity.replace(/\.0+$/,'')} x {product.unit}
+              {/* ({Object.keys(packing).map(key => packing[key] ?
+              <span key={key}>{key} × {product.unit}</span> : null)}) */}
               <br/>
             </Fragment>
           )
