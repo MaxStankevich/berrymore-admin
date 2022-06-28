@@ -60,13 +60,19 @@ const ProductForm = ({ product = {}, onSuccess }) => {
             },
           ]}
         >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="unit"
+          label="Единица"
+        >
           <Input/>
         </Form.Item>
         <Form.Item
           name="price"
-          label="Цена за 1 кг (руб)"
+          label="Цена за единицу (руб)"
         >
-          <InputNumber />
+          <Input />
         </Form.Item>
         <Form.Item
           name="description"

@@ -14,7 +14,7 @@ const Quantity = ({ value, onChange, form, fieldName, products }) => {
 
   return (
     <div className="packing-quantity">
-      <div>Итого: {value || 0} кг</div>
+      {/* <div>Итого: {value || 0} кг</div> */}
       <div>{totalPrice ? `${totalPrice} BYN` : null}</div>
     </div>
   );

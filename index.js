@@ -26,8 +26,10 @@ const OrderStatus = db.orderStatus;
 const User = db.user;
 const Product = db.product;
 
+const alter = process.env.DB_ALTER;
+
 // { force: true }
-db.sequelize.sync().then(() => {
+db.sequelize.sync({ alter }).then(() => {
   console.log('Drop and Resync Db');
   console.log("DB_HOST", process.env.DB_HOST);
   console.log("PORT", process.env.PORT);

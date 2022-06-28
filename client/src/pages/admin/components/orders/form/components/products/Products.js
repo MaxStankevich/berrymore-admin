@@ -45,7 +45,7 @@ const OrderForm = ({ form, products, productsLoading }) => {
                                 <Select disabled={productsLoading}>
                                   {products.map(item => (
                                     <Option disabled={selectedIds.includes(item.id)} key={item.id} value={item.id}>
-                                      {item.name} {item.price ? `(${item.price} BYN за 1 кг)` : null}
+                                      {`${item.name} (${item.price} BYN за ${item.unit})`}
                                     </Option>
                                   ))}
                                 </Select>
@@ -102,14 +102,13 @@ const OrderForm = ({ form, products, productsLoading }) => {
                 </div>
               )
             })}
-
-            {fields.length < products.length &&
+            {/* {fields.length < products.length && */}
             <Form.Item {...tailFormItemLayout}>
               <Button type="dashed" onClick={() => add()} icon={<PlusOutlined/>}>
                 Добавить товар
               </Button>
             </Form.Item>
-            }
+            {/* } */}
           </>
         )
       }}

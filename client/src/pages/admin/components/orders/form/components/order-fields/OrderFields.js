@@ -56,6 +56,9 @@ const OrderFields = ({ form }) => {
           format="DD.MM.YYYY"
           disabledDate={(current) => {
             if (current) {
+              if (current.isBefore(moment("2022-07-05"))) {
+                return true;
+              }
               if (current.isSame(new Date(), "day")) {
                 return false;
               }
@@ -64,21 +67,6 @@ const OrderFields = ({ form }) => {
             return false;
           }}
         />
-      </Form.Item>
-      <Form.Item
-        name="deliveryTime"
-        label="Время доставки"
-        rules={[
-          {
-            required: true,
-            message: 'Укажите время доставки',
-          },
-        ]}
-      >
-        <Select>
-          <Select.Option value="9:00-12:00">9:00-12:00</Select.Option>
-          <Select.Option value="16:00-22:00">16:00-22:00</Select.Option>
-        </Select>
       </Form.Item>
       <Form.Item
         name="paymentMethod"

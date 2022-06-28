@@ -18,7 +18,8 @@ const getPackingValue = (productId) => {
 
 const Packing = ({ value: formValue = "{}", onChange, productId }) => {
   const value = (typeof formValue === "string" ? JSON.parse(formValue) : formValue) || {};
-  const packingValue = getPackingValue(productId);
+  // const packingValue = getPackingValue(productId);
+  const packingValue = { title: 'Укажите количество единиц товара', values: [1] };
 
   useDidUpdateEffect(() => {
     onChange("{}")
@@ -30,7 +31,6 @@ const Packing = ({ value: formValue = "{}", onChange, productId }) => {
       <div className="packing-wrapper">
         {packingValue.values.map(packing =>
           <div key={packing} className="packing-input-wrapper">
-            <div className="packing-input-label">{packing}кг</div>
             <div className="packing-input">
               <MinusOutlined style={{ fontSize: 20 }} onClick={() => {
                 onChange(JSON.stringify({ ...value, [packing]: (value[packing] || 1) - 1 }))
