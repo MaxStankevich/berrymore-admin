@@ -29,6 +29,10 @@ const Products = () => {
       dataIndex: 'unit',
     },
     {
+      title: 'Вес единицы',
+      dataIndex: 'unitWeight',
+    },
+    {
       title: 'Цена за единицу (руб)',
       dataIndex: 'price',
     },

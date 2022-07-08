@@ -48,7 +48,7 @@ const Statistics = () => {
     const productsByName = groupBy(currentProducts, "name");
     const productsQuantity = Object.keys(productsByName).map(key => {
       const value = productsByName[key].reduce((acc, item) => {
-        acc += Number(item.order_product.quantity);
+        acc += Number(item.order_product.quantity * (item.unitWeight || 1));
         return acc
       }, 0);
 
@@ -67,9 +67,9 @@ const Statistics = () => {
 
   const data = Object.keys(productsByName).map(key => {
     const value = productsByName[key].reduce((acc, item) => {
-      acc.all += Number(item.order_product.quantity);
+      acc.all += Number(item.order_product.quantity * (item.unitWeight || 1));
       if (item.orderStatusId === 1) {
-        acc.raw += Number(item.order_product.quantity);
+        acc.raw += Number(item.order_product.quantity * (item.unitWeight || 1));
       }
       return acc
     }, { all: 0, raw: 0 });

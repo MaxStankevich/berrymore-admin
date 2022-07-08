@@ -66,13 +66,19 @@ const ProductForm = ({ product = {}, onSuccess }) => {
           name="unit"
           label="Единица"
         >
-          <Input/>
+          <Input />
+        </Form.Item>
+        <Form.Item
+          name="unitWeight"
+          label="Вес единицы (кг)"
+        >
+          <Input type="number" />
         </Form.Item>
         <Form.Item
           name="price"
           label="Цена за единицу (руб)"
         >
-          <Input />
+          <Input type="number" />
         </Form.Item>
         <Form.Item
           name="description"

@@ -9,6 +9,9 @@ module.exports = (sequelize, Sequelize) => {
     unit: {
       type: Sequelize.STRING
     },
+    unitWeight: {
+      type: Sequelize.FLOAT
+    },
     price: {
       type: Sequelize.INTEGER
     },
