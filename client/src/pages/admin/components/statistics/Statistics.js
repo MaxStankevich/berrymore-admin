@@ -3,6 +3,28 @@ import { DatePicker, Descriptions } from "antd";
 import { Pie } from '@ant-design/charts';
 import { groupBy } from 'lodash-es';
 import request from "../../../../utils/request";
+import getCurDateISO from "../../../../utils/getCurDateISO";
+import moment from 'moment';
+
+const getInitCreatedAt = () => {
+  const lastSavedCreatedAtStart = localStorage.getItem('stats:createdAtStart');
+
+  return lastSavedCreatedAtStart ? JSON.stringify([lastSavedCreatedAtStart, getCurDateISO()]) : null;
+};
+
+const getDateRangePickerValue = strRange => {
+  if (!strRange) {
+    return null;
+  }
+
+  const [startDate, endDate] = JSON.parse(strRange);
+
+  if (!startDate || !endDate) {
+    return null;
+  }
+
+  return [moment(startDate), moment(endDate)];
+};
 
 const Statistics = () => {
   const [orders, setOrders] = useState({ data: [] });
@@ -10,8 +32,18 @@ const Statistics = () => {
   const [params, setParams] = useState({
     page: 1,
     size: 10000,
-    createdAt: null,
+    createdAt: getInitCreatedAt(),
   });
+
+  useEffect(() => {
+    if (params.createdAt) {
+      const [startDate] = JSON.parse(params.createdAt);
+
+      if (startDate) {
+        localStorage.setItem('stats:createdAtStart', startDate);
+      }
+    }
+  }, [params.createdAt]);
 
   const products = orders.data.reduce((acc, order) => {
     return acc.concat(order.products.map(prod => ({
@@ -133,9 +165,13 @@ const Statistics = () => {
 
   return (
     <>
-      <DatePicker.RangePicker style={{ marginBottom: "50px", width: 300 }} onChange={(value, str) => {
-        updateParams({ createdAt: JSON.stringify(str) })
-      }}/>
+      <DatePicker.RangePicker
+        style={{ marginBottom: "50px", width: 300 }}
+        value={getDateRangePickerValue(params.createdAt)}
+        onChange={(value, str) => {
+          updateParams({ createdAt: JSON.stringify(str) })
+        }}
+      />
       <Descriptions
         title="Сумма по статусам (BYN)"
         bordered
